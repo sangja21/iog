@@ -22,9 +22,9 @@ a {
 	text-decoration: none;
 }
 
-.clearfix::after {
+.clearfix:after {
 	content: "";
-	display: table;
+	display: block;
 	clear: both;
 }
 
@@ -67,11 +67,40 @@ h3 {
 	margin-bottom: 30px;
 }
 
+#top {
+	margin-top: 50px;
+}
+
 #top table th {
 	width: 80px;
 	height: 30px;
 }
 
+#bottom {
+	margin-top: 50px;
+	display: block;
+}
+
+#bottom table td {
+	width: 80px;
+}
+
+#bottom .col {
+	width: 250px;
+}
+
+#btnWrap {
+	margin-top: 40px;
+}
+
+#btnWrap input {
+	width: 80px;
+	height: 30px;
+}
+
+#btnWrap input:first-child {
+	margin-right: 200px;
+}
 </style>
 
 </head>
@@ -105,7 +134,7 @@ h3 {
 		<input type="submit" value="조회" id="btnSearch">
 	</form>
 
-	<div id="top">
+	<div id="top" class="clearfix">
 
 		<table>
 
@@ -113,21 +142,78 @@ h3 {
 				<tr>
 					<th>상품코드</th>
 					<th>상품명</th>
-					<th>제조사</th>
-					<th></th>
-					<th></th>
-					<th></th>
+					<th>제조사명</th>
+					<th>단위명</th>
+					<th>재고수량</th>
+					<th>재고여부</th>
+					<th>사용여부</th>
 				</tr>
 			</thead>
 
-			<tr>
+			<tbody>
+				<tr>
+					<td class="product">L0001</td>
+					<td>남성티셔츠</td>
+					<td>TATE</td>
+					<td>ea</td>
+					<td>10</td>
+					<td><input type="checkbox" disabled checked></td>
+					<td><input type="checkbox" disabled checked></td>
+				</tr>
 
-			</tr>
+				<tr>
+					<td class="product">L0002</td>
+					<td>여성티셔츠</td>
+					<td>TKKL</td>
+					<td>ea</td>
+					<td>0</td>
+					<td><input type="checkbox" disabled></td>
+					<td><input type="checkbox" disabled></td>
+				</tr>
+			</tbody>
 		</table>
 
 	</div>
 
-	<div id="bottom"></div>
+	<div id="bottom" class="clearfix">
+
+		<table id="productDetailsTable">
+
+			<tr>
+				<td>상품코드</td>
+				<td class="col"></td>
+			</tr>
+
+			<tr>
+				<td>상품명</td>
+				<td class="col"></td>
+			</tr>
+
+			<tr>
+				<td>제조사명</td>
+				<td class="col"></td>
+			</tr>
+
+			<tr>
+				<td>단위명</td>
+				<td class="col"></td>
+			</tr>
+
+			<tr>
+				<td>입고수량</td>
+				<td class="col"></td>
+			</tr>
+
+		</table>
+
+	</div>
+
+	<div class="clearfix" id="btnWrap">
+
+		<input type="button" value="수정"> <input type="button"
+			value="저장">
+
+	</div>
 
 
 	<script type="text/javascript">
@@ -158,6 +244,37 @@ h3 {
 		}
 
 		changeSecondSelect(); // 2차 카테고리 초기내용 설정
+
+		// 상품코드를 클릭하면 하위에 상세 내용이 출력
+		var Product = document.getElementsByClassName("product");
+
+		// 상품코드를 토대로 배열변수 선언
+		var productsInfo = {
+			"L0001" : [ "L0001", "남성티셔츠", "TATE", "ea", "10" ],
+			"L0002" : [ "L0002", "여성티셔츠", "TKKL", "ea", "0" ]
+		};
+		
+		var indicate = document.getElementsByClassName("col");
+
+		//var prCode;
+
+		for (let i = 0; i < Product.length; i++) {
+			Product[i].addEventListener('click', function() {
+				let prCode = Product[i].innerText;
+				let productDetail = productsInfo[prCode];
+
+				// 테이블에 데이터 삽입
+				if (productDetail) {
+		            // 상세 정보를 표시할 테이블의 "col" 클래스를 가진 td 요소들을 가져옵니다.
+		            let cols = document.querySelectorAll("#productDetailsTable .col");
+
+		            for (let j = 0; j < cols.length && j < productDetail.length; j++) {
+		                cols[j].innerText = productDetail[j];
+		            }
+		        }
+			});
+
+		}
 	</script>
 
 </body>
